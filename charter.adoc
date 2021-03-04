@@ -1,0 +1,49 @@
+# RASD Charter
+
+ 
+
+## Scope
+
+In order to promote development of RISC-V in server domain, the RAS(Reliability, Availability and Serviceability) Horizontal Subcommittee will define a RAS specification to support design of RAS features in SoC, firmware and OS.
+
+ 
+
+## Goals
+
+ 
+
+* RISC-V RAS Specification
+
+** RAS terminology interpretation:
+
+*** What is RAS
+
+*** Types of error
+
+*** Process of RAS
+
+ 
+
+** RAS framework design
+
+*** Error recording: Standard error record formats (e.g. register banks, APEI)
+
+*** Error reporting: Error event reporting methods (e.g. exceptions, NMI,  local/global interrupts)
+
+*** Error recovery: strategies adopted to handle the error (e.g. neglect/warning/recover/isolation/halt)
+
+ 
+
+** RAS feature support, for example:
+
+*** E2E Data protection
+
+*** Error isolation
+
+*** Data poisoning containment
+
+*** Advanced error reporting for PCIe
+
+ 
+
+* RAS framework design verification
