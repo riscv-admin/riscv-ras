@@ -15,7 +15,7 @@
 https://github.com/riscv/riscv-rasd/blob/main/charter.adoc
 
 * GitHub Repo: https://github.com/riscv/riscv-rasd
-** Meeting minutes:
+** Meeting minutes:https://github.com/riscv/riscv-rasd/blob/main/minutes
 ** charter: https://github.com/riscv/riscv-rasd/blob/main/charter.adoc
 ** Specification: TBD
 ** Issue tracking: https://github.com/riscv/riscv-rasd/issues
