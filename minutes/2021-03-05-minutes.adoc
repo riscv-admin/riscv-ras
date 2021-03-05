@@ -1,4 +1,4 @@
-# RISC-V Code Speed Optimization SIG Meeting Minutes
+# RISC-V RASD HSC Meeting Minutes
 
 * Time: 2021/03/04 7am PDT.
 * Attendees: ~15
