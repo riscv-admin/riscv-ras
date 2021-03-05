@@ -1,0 +1,25 @@
+# RISC-V Code Speed Optimization SIG Meeting Minutes
+
+* Time: 2021/03/04 7am PDT.
+* Attendees: ~15
+
+## Topics:
+
+* Declare of anti-trust and code of conduct notice.
+
+* Amit Pabalkar presents "Introduction of SIG-Safety" to seek cooperation with RASD(e.g.in error management).
+
+* Hao Guan introduce the final charter draft.
+** some attendees suggest to expend RAS scope to include embedded domain.
+** charter has been updated:
+https://github.com/riscv/riscv-rasd/blob/main/charter.adoc
+
+* GitHub Repo: https://github.com/riscv/riscv-rasd
+** Meeting minutes:
+** charter: https://github.com/riscv/riscv-rasd/blob/main/charter.adoc
+** Specification: TBD
+** Issue tracking: https://github.com/riscv/riscv-rasd/issues
+** send an email to 'guanhao5@huawei.com' if you want to join the repo
+
+* Next step:
+Discuss about RAS terms and definition.
