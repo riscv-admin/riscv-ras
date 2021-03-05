@@ -4,7 +4,7 @@
 
 ## Scope
 
-In order to promote development of RISC-V in server domain, the RAS(Reliability, Availability and Serviceability) Horizontal Subcommittee will define a RAS specification to support design of RAS features in SoC, firmware and OS.
+In order to promote development of RISC-V in server and embedded domain, the RAS(Reliability, Availability and Serviceability) Horizontal Subcommittee will define a RAS specification to support design of RAS features in SoC, firmware and OS.
 
  
 
