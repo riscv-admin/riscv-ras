@@ -1,0 +1,24 @@
+= RISC-V RAS Specification (draft)
+:toc:
+:sectnums:
+
+== Introduction
+This file describes RISC-V RAS extension. It contains terminology definition, RAS framework design and RAS feature implementation suggestion. This extension is mandatory for RISC-V based systems to implement RAS capabilities.
+
+== Terminology
+=== Reliability, Availability, Serviceability
+
+=== Errors, Failures, Faults, Defects
+
+
+== RISC-V RAS Framework
+TODO
+
+(RAS system registers, error reporting methods, interface between Firmware & OS)
+
+
+
+== RAS Feature Support
+TODO
+
+(architecture-dependent RAS features design)
