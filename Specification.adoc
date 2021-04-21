@@ -6,10 +6,29 @@
 This file describes RISC-V RAS extension. It contains terminology definition, RAS framework design and RAS feature implementation suggestion. This extension is mandatory for RISC-V based systems to implement RAS capabilities.
 
 == Terminology
-=== Reliability, Availability, Serviceability
+Terms such as error, failure, fault or system repair have a specific meaning when used in the context of the system resilience. These terms, however, may be used differently in distinct studies, and in academia and industry. Therefore, to mitigate any terminology-related confusion or misunderstanding, we start with a brief summary of the resilience-related terminology that we use in this document.
 
-=== Errors, Failures, Faults, Defects
+=== Resilience, Reliability, Availability, Serviceability
 
+Resilience is a general term that refers to a system's capability to recover from or prevent failures. System resilience is typically subdivided into three separate concepts: Reliability, Availability and Serviceability (RAS). There are many ways to define RAS; an intuitive definition in the context of an HPC system is as follows:
+● Reliability: How infrequently is a failure seen in a system?
+● Availability: How infrequently is the functionality of a system or application impacted by failures?
+● Serviceability: How well are system failures and their impact communicated to users and service personnel, and how efficiently and non-disruptively can the HPC system or its components be repaired and brought back into service?
+
+=== Errors, Failures, Faults 
+
+Most of the previous studies use the following definitions of computing system failures, errors and faults [Avizienis et al., 2004]: 
+
+● Failure is an event that occurs when the delivered service deviates from correct service. For example, it is expected that a data read from memory delivers correct data stored on a given address; and any deviation from this service is a failure of the memory device or interface. This failure, however, does not have to imply disruption in service of the affected node. In case of a failing memory device, for example, Error Correcting Code (ECC) can correct the errors so the server  delivering correct service with no negative impact on the behavior of the running applications. Failures can be detected or undetected. 
+
+●  Error is the deviation of the system state (seen externally) from its correct service state. For example, a memory device (e.g., DIMM) can deliver data to the memory controller that is inconsistent with the stored ECC. In this case, the memory controller will flag a memory error. Errors can be further divided into two groups: corrected and uncorrected. 
+
+Note (Petar Radojkovic, 21-April-2021): The errors that are not corrected can be referred to as uncorrected (Arm) or uncorrectable (Intel, HPC system integrators). We should decide which term should we use in this document; we should not use interchangably "uncorrectable" and "uncorrected" .
+
+● Fault is the adjudged or hypothesized root cause of an error. For example, the cause of a DRAM error could be a particle impact or a defect in the memory cell or circuit. Not all faults lead to errors — errors get manifested only if faults change the system state, e.g. an arithmetic operation or a data accessed.
+
+
+Reference: [Avizienis et al., 2004] A. Avizienis, J.-C. Laprie, B. Randell and C. Landwehr. “Basic concepts and taxonomy of dependable and secure computing”. IEEE Transactions on Dependable and Secure Computing, pp. 11-33. 2004.
 
 == RISC-V RAS Framework
 TODO
