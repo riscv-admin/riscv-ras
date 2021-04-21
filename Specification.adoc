@@ -5,30 +5,83 @@
 == Introduction
 This file describes RISC-V RAS extension. It contains terminology definition, RAS framework design and RAS feature implementation suggestion. This extension is mandatory for RISC-V based systems to implement RAS capabilities.
 
+
 == Terminology
 Terms such as error, failure, fault or system repair have a specific meaning when used in the context of the system resilience. These terms, however, may be used differently in distinct studies, and in academia and industry. Therefore, to mitigate any terminology-related confusion or misunderstanding, we start with a brief summary of the resilience-related terminology that we use in this document.
 
 === Resilience, Reliability, Availability, Serviceability
 
+
 Resilience is a general term that refers to a system's capability to recover from or prevent failures. System resilience is typically subdivided into three separate concepts: Reliability, Availability and Serviceability (RAS). There are many ways to define RAS; an intuitive definition in the context of an HPC system is as follows:
-● Reliability: How infrequently is a failure seen in a system?
-● Availability: How infrequently is the functionality of a system or application impacted by failures?
-● Serviceability: How well are system failures and their impact communicated to users and service personnel, and how efficiently and non-disruptively can the HPC system or its components be repaired and brought back into service?
+
+● **Reliability**: How infrequently is a failure seen in a system?
+
+● **Availability**: How infrequently is the functionality of a system or application impacted by failures?
+
+● **Serviceability**: How well are system failures and their impact communicated to users and service personnel, and how efficiently and non-disruptively can the HPC system or its components be repaired and brought back into service?
+
 
 === Errors, Failures, Faults 
 
 Most of the previous studies use the following definitions of computing system failures, errors and faults [Avizienis et al., 2004]: 
 
-● Failure is an event that occurs when the delivered service deviates from correct service. For example, it is expected that a data read from memory delivers correct data stored on a given address; and any deviation from this service is a failure of the memory device or interface. This failure, however, does not have to imply disruption in service of the affected node. In case of a failing memory device, for example, Error Correcting Code (ECC) can correct the errors so the server  delivering correct service with no negative impact on the behavior of the running applications. Failures can be detected or undetected. 
 
-●  Error is the deviation of the system state (seen externally) from its correct service state. For example, a memory device (e.g., DIMM) can deliver data to the memory controller that is inconsistent with the stored ECC. In this case, the memory controller will flag a memory error. Errors can be further divided into two groups: corrected and uncorrected. 
+● **Failure** is an event that occurs when the delivered service deviates from correct service. For example, it is expected that a data read from memory delivers correct data stored on a given address; and any deviation from this service is a failure of the memory device or interface. This failure, however, does not have to imply disruption in service of the affected node. In case of a failing memory device, for example, Error Correcting Code (ECC) can correct the errors so the server  delivering correct service with no negative impact on the behavior of the running applications. Failures can be detected or undetected. 
 
-Note (Petar Radojkovic, 21-April-2021): The errors that are not corrected can be referred to as uncorrected (Arm) or uncorrectable (Intel, HPC system integrators). We should decide which term should we use in this document; we should not use interchangably "uncorrectable" and "uncorrected" .
+
+●  **Error** is the deviation of the system state (seen externally) from its correct service state. For example, a memory device (e.g., DIMM) can deliver data to the memory controller that is inconsistent with the stored ECC. In this case, the memory controller will flag a memory error. Errors can be further divided into two groups: corrected and uncorrected. 
+
+Note, Petar Radojkovic, 21-April-2021: The errors that are not corrected can be referred to as uncorrected (Arm) or uncorrectable (Intel, HPC system integrators). We should decide which term should we use in this document; we should not use interchangably "uncorrectable" and "uncorrected" .
 
 ● Fault is the adjudged or hypothesized root cause of an error. For example, the cause of a DRAM error could be a particle impact or a defect in the memory cell or circuit. Not all faults lead to errors — errors get manifested only if faults change the system state, e.g. an arithmetic operation or a data accessed.
 
 
-Reference: [Avizienis et al., 2004] A. Avizienis, J.-C. Laprie, B. Randell and C. Landwehr. “Basic concepts and taxonomy of dependable and secure computing”. IEEE Transactions on Dependable and Secure Computing, pp. 11-33. 2004.
+Reference: 
+[Avizienis et al., 2004] A. Avizienis, J.-C. Laprie, B. Randell and C. Landwehr. “Basic concepts and taxonomy of dependable and secure computing”. IEEE Transactions on Dependable and Secure Computing, pp. 11-33. 2004.
+
+== The cost of system errors 
+In order to quantify the impact of system errors, it is important to distinguish between:
+
+(1) Scheduled and unscheduled system outages and repairs
+
+(2) Corrected and uncorrected errors
+
+(3) Detected and undetected failures
+
+=== Scheduled vs. unscheduled system outages and repairs 
+
+**Scheduled system outage and repairs** are scheduled ahead of time based on failure prediction or observed reduced performance caused by corrected errors. The scheduled system repairs typically require replacement of a single hardware component, most frequently a CPU or a memory DIMM. In this scenario a working component that is predicted to fail or whose performance is below expectations, is replaced with a spare one. The cost of this hardware replacement is in the range of a few node hours of downtime. After the hardware component is replaced, the node is tested. Standard HPC node tests are based on running stress benchmarks over a time period that ranges between a few hours and a few days.
+
+Uncorrected hardware errors lead to **unscheduled outages and system repairs**. Similar to scheduled repairs, unscheduled system repairs usually involve the substitution of a single hardware component with a spare one, and testing of the affected node. The penalty of unscheduled outages, however, comes from unplanned HPC job termination. Since usually such job termination provides no useful outcome, all the node hours from the start of the job until the unscheduled outage is lost. Checkpoint/restart approach would reduce the cost of job termination; the penalty would cover only the node hours from the last saved checkpoint until the unscheduled outages. In HPC, a single tightly-coupled job may execute for hours or even days on a large number of nodes, and therefore the penalty of an unscheduled job termination can be significant.
+
+=== Corrected, uncorrected and deferred errors 
+
+It is important to distinguish between corrected and uncorrected system errors and their impact.
+
+**Corrected errors**: The nodes that are used in HPC systems incorporate advanced Error Correcting Codes (ECC) and protocols that can detect and correct hardware errors. For example, main memory ECC is able to detect and correct multiple corrupted bits in a data word and even handle cases where an entire DRAM chip is corrupted. Data correction is performed in parallel with data reads, **so corrected errors effectively have no impact on system performance**; although energy consumption may be negatively impacted.
+
+**Uncorrected errors**: If the detected error in a component cannot be corrected with available error correction mechanisms, typically the HPC job has to be terminated with no useful outcome from the execution. The consequence of this is that the node-hours used on the job until error detection are lost. The penalty of such a job termination may be significant (in terms of lost server hours); amounting to monetary, node availability and energy costs.
+
+Also, when an uncorrected error is detected, the node is typically shut down and removed from production until the faulty part has been replaced and the node has been tested. Advanced resilience features enable running the node in a degraded mode, e.g. with blacklist memory regions in which uncorrected errors were detected. In current systems, the total penalty of uncorrected errors, including the lost server hours, is in the order of tens or hundreds of node hours.
+
+**Deferred Errors**: A deferred error is a detected error that has not been corrected (i.e. that remains uncorrected), but has been allowed to propagate. However, the propagation is not silent, since the system knows about the error and is able to track it and its impact. Propagation of deferred errors is also referred to as data poisoning.
+
+Overall, uncorrected errors can have a **significant negative impact on system performance, reliability and availability**.
+
+=== Detected and undetected failures
+
+Failures that manifest as errors, i.e., deviation of the system state (seen externally) from its correct expected system state, are **detected failures**.
+
+Some of the failures may not be detected with state-of-the-art error detection mechanisms. The **undetected failures** may lead to several outcomes:
+
+● **No impact**: Undetected failures may contaminate obsolete data, i.e., data not used by the application after the failure’s occurrence. In this case, the **undetected failures** have no impact on application outcome or the overall service provided by the HPC system.
+
+● **Incorrect system operation**: Undetected failure may lead to incorrect data being used by the application, e.g., affecting addresses of even binary code. Use of such incorrect data addresses or code may lead to service interruption, e.g., because the application tries to access an address that is invalid in its address space. For such uncorrected errors, the cost caused by service interruptions, system repair and testing is high.
+
+● **Silent Data Corruption (SDC)**: Undetected failures may lead to unexpected erroneous application outcomes — the application may execute to the end and give an answer that could even look plausible, but is actually wrong. This scenario may occur if the failure affects data that is later used by the application. Producing undetected incorrect scientific results is considered **more damaging than a service interruption** [Geist, 2013].
+
+Reference: 
+[Geist, 2013] A. Geist. “How To Kill A Supercomputer: Dirty Power, Cosmic Rays, and Bad Solder”. IEEE Spectrum, 2013.
 
 == RISC-V RAS Framework
 TODO
