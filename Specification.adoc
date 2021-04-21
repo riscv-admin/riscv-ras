@@ -33,7 +33,7 @@ Most of the previous studies use the following definitions of computing system f
 
 Note, Petar Radojkovic, 21-April-2021: The errors that are not corrected can be referred to as uncorrected (Arm) or uncorrectable (Intel, HPC system integrators). We should decide which term should we use in this document; we should not use interchangably "uncorrectable" and "uncorrected" .
 
-● Fault is the adjudged or hypothesized root cause of an error. For example, the cause of a DRAM error could be a particle impact or a defect in the memory cell or circuit. Not all faults lead to errors — errors get manifested only if faults change the system state, e.g. an arithmetic operation or a data accessed.
+● **Fault** is the adjudged or hypothesized root cause of an error. For example, the cause of a DRAM error could be a particle impact or a defect in the memory cell or circuit. Not all faults lead to errors — errors get manifested only if faults change the system state, e.g. an arithmetic operation or a data accessed.
 
 
 Reference: 
