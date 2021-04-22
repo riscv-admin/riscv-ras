@@ -33,6 +33,8 @@ Most of the previous studies use the following definitions of computing system f
 
 Note, Petar Radojkovic, 21-April-2021: The errors that are not corrected can be referred to as uncorrected (Arm) or uncorrectable (Intel, HPC system integrators). We should decide which term should we use in this document; we should not use interchangably "uncorrectable" and "uncorrected" .
 
+Note, Petar Radojkovic, 22-April-2021: We should also make a decision to use term "resilience" or "resiliency". I prefer "resilience". I could do a quick research on recent RAS documents to see which term is preferred by the community.   
+
 ● **Fault** is the adjudged or hypothesized root cause of an error. For example, the cause of a DRAM error could be a particle impact or a defect in the memory cell or circuit. Not all faults lead to errors — errors get manifested only if faults change the system state, e.g. an arithmetic operation or a data accessed.
 
 
